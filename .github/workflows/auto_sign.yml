@@ -31,5 +31,7 @@ jobs:
           NAME: ${{ secrets.NAME }}
           ADDRESS: ${{ secrets.ADDRESS }}
           IMG: ${{ secrets.IMG }}
+          LONGITUDE: ${{ secrets.LONGITUDE }}
+          LATITUDE: ${{ secrets.LATITUDE }}
         run: |
           python3 auto_sign.py

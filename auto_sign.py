@@ -11,8 +11,8 @@ setting = {
     "account": os.getenv("ACCOUNT"),  # 账号（手机号 ）「必填」
     "password": os.getenv("PASSWORD"),  # 密码 「必填」
     "sign": {
-        "long": '1',  # 定位签到经纬度 「可空」
-        "lat": '1',  # 定位签到经纬度 「可空」
+        "long": os.getenv("LONGITUDE"),  # 定位签到经度 「可空」
+        "lat": os.getenv("LATITUDE"),  # 定位签到纬度 「可空」
         "address": os.getenv('ADDRESS'),  # 定位签到显示的地址 「必填」
         "name": os.getenv('NAME'),  # 签到姓名 「必填」
         # 图片自定义之后再写，这里可以自己填入objectId列表就可以了，默认上传的图片是「图片加载失败」用来迷惑老师
