@@ -1,0 +1,34 @@
+name: auto_sign
+
+on:
+  push:
+  workflow_dispatch:
+  schedule:
+    - cron: "0,1,2,3,4,5 0 * * 1"
+    - cron: "30,31,32,33,34,35 5 * * 1"
+    - cron: "0,1,2,3,4,5 0 * * 2"
+    - cron: "55,56,57,58,59 1 * * 2"
+    - cron: "55,56,57,58,59 1 * * "
+
+jobs:
+  run_sign:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - name: Install dependencies
+        run: |
+          pip3 install requests
+      - name: Run sign
+        env:
+          ACCOUNT: ${{ secrets.ACCOUNT }}
+          PASSWORD: ${{ secrets.PASSWORD }}
+          NAME: ${{ secrets.NAME }}
+          ADDRESS: ${{ secrets.ADDRESS }}
+          IMG: ${{ secrets.IMG }}
+        run: |
+          python3 auto_sign.py
