@@ -9,7 +9,7 @@ requests.packages.urllib3.disable_warnings()
 # 用户配置！必须写！
 setting = {
     "account": os.getenv("ACCOUNT"),  # 账号（手机号 ）「必填」
-    "password": so.getenv("PASSWORD"),  # 密码 「必填」
+    "password": os.getenv("PASSWORD"),  # 密码 「必填」
     "sign": {
         "long": '1',  # 定位签到经纬度 「可空」
         "lat": '1',  # 定位签到经纬度 「可空」
