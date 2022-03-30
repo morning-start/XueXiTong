@@ -15,13 +15,13 @@
 
 加:warning:的是必填内容的；其他的可以不填内容，但一定要添加到 `Secrets` 中
 
-ACOUNT: 手机号:warning:
-PASSWORD: 密码:warning:
-ADDRESS: 地址:warning:
-NAME: 打卡显示姓名:warning:
-IMG: 图片链接，用于图片打卡
-LONGITUDE: 经度
-LATITUDE: 纬度
+- ACOUNT: 手机号:warning:
+- PASSWORD: 密码:warning:
+- ADDRESS: 地址:warning:
+- NAME: 打卡显示姓名:warning:
+- IMG: 图片链接，用于图片打卡
+- LONGITUDE: 经度
+- LATITUDE: 纬度
 
 账号和密码不确定可以先在[学习通官网](https://passport2.chaoxing.com/login?fid=&newversion=true&refer=https%3A%2F%2Fi.chaoxing.com)尝试以下，再输入
 
