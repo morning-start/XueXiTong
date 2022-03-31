@@ -9,7 +9,7 @@ on:
     - cron: "55 1 * * 2"
     - cron: "30 5 * * 2"
     - cron: "50/1 1 * * 4"
-    - cron: "35/1 2 * * 4"
+    - cron: "/1 2 * * 4"
 
 jobs:
   run_sign:
