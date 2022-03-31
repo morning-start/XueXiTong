@@ -34,10 +34,21 @@ schedule:
   - cron: "* * * * *"
 ```
 
-corn 对应的就是时间，格式是`分钟 小时 日 月 星期`（PS：就是[crontab](https://www.cnblogs.com/cocowool/archive/2009/04/22/1441291.html)格式）。
-也可以看[github 的官方文件](https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule)
+corn 对应的就是时间，格式是`分钟 小时 日 月 星期`可以看[github 的官方文件](https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#schedule)
 
 注意：corn 设置的时间是 UTC，时间的话要加八小时。例如 UTC:00:00 就是时间 08:00
+
+```txt
+┌───────────── minute (0 - 59)
+│ ┌───────────── hour (0 - 23)
+│ │ ┌───────────── day of the month (1 - 31)
+│ │ │ ┌───────────── month (1 - 12 or JAN-DEC)
+│ │ │ │ ┌───────────── day of the week (0 - 6 or SUN-SAT)
+│ │ │ │ │
+│ │ │ │ │
+│ │ │ │ │
+* * * * *
+```
 
 | 算子 | 描述         | 例子                                                                                  |
 | ---- | ------------ | ------------------------------------------------------------------------------------- |
