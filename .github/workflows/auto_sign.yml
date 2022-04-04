@@ -1,15 +1,7 @@
 name: auto_sign
 
 on:
-  workflow_dispatch:
-  schedule:
-    - cron: "0 0 * * 1"
-    - cron: "30 5 * * 1"
-    - cron: "0 0 * * 2"
-    - cron: "55 1 * * 2"
-    - cron: "30 5 * * 2"
-    - cron: "50/1 1 * * 4"
-    - cron: "30/3 6 * * 4"
+  workflow_dispatch
 
 jobs:
   run_sign:
