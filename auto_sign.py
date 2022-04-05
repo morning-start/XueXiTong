@@ -384,5 +384,5 @@ if __name__ == "__main__":
     res = init()
     if(res == 1):
         print("初始化完成")
-        if check() & send:
+        if check() and send:
             sendmail(setting["email"], content)
