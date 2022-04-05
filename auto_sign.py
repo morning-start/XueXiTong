@@ -1,36 +1,64 @@
-import requests
+import datetime
 import json
 import urllib.parse
-import datetime
-import os
-session = requests.session()
-requests.packages.urllib3.disable_warnings()
+import requests
+import smtplib
+from email.mime.text import MIMEText
+from config import *
 
-# 用户配置！必须写！
-setting = {
-    "account": os.getenv("ACCOUNT"),  # 账号（手机号 ）「必填」
-    "password": os.getenv("PASSWORD"),  # 密码 「必填」
-    "sign": {
-        "long": os.getenv("LONGITUDE"),  # 定位签到经度 「可空」
-        "lat": os.getenv("LATITUDE"),  # 定位签到纬度 「可空」
-        "address": os.getenv('ADDRESS'),  # 定位签到显示的地址 「必填」
-        "name": os.getenv('NAME'),  # 签到姓名 「必填」
-        # 图片自定义之后再写，这里可以自己填入objectId列表就可以了，默认上传的图片是「图片加载失败」用来迷惑老师
-        "img": os.getenv("IMG"),
-        "sign_common": True,  # 是否开启普通签到 「True 开启 False 关闭」 默认开启，无需修改
-        "sign_pic": True,  # 是否开启照片签到 「True 开启 False 关闭」 默认开启，无需修改
-        "sign_hand": True,  # 是否开启手势签到 「True 开启 False 关闭」 默认开启，无需修改
-        "sign_local": True,  # 是否开启定位签到 「True 开启 False 关闭」 默认开启，无需修改
-    },
-    "other": {
-        "count": 5,  # 每门课程只检测前N个活动 避免因课程活动太多而卡住
-    }
-}
+# with open("./config.json", 'r', encoding='utf-8') as f:
+#     conf = json.loads(f.read())
+# setting = conf[0]
+# conf = conf[1]
+
 
 # 乱七八糟的变量 不要动我
+send = conf["mail_host"] and conf["mail_password"] and conf["mail_user"]
+session = requests.session()
+requests.packages.urllib3.disable_warnings()
 mycookie = ""
 myuid = ""
 courselist = []
+content = "签到成功：\n"
+
+
+def sendmail(mail, content):
+    receivers = []  # 接收人邮箱
+    receivers.append(mail)
+    title = '超星自动签到系统'  # 邮件主题
+    message = MIMEText(str(content), 'plain', 'utf-8')  # 内容, 格式, 编码
+    message['From'] = "{}".format(conf["mail_user"])
+    message['To'] = ",".join(receivers)
+    message['Subject'] = title
+
+    try:
+        smtpObj = smtplib.SMTP_SSL(conf["mail_host"], 465)  # 启用SSL发信, 端口一般是465
+        smtpObj.login(conf["mail_user"], conf["mail_password"])  # 登录验证
+        smtpObj.sendmail(conf["mail_user"], receivers,
+                         message.as_string())  # 发送
+        print('================================')
+        print('||                            ||')
+        print("||       Have send mail       ||")
+        print('||                            ||')
+        print('================================')
+    except smtplib.SMTPException as e:
+        print(e, "邮件发送失败")
+        pass
+
+
+def write_content(className, activeType):
+    """ 写入内容 """
+    global content
+    if activeType == 2:
+        classType = "普通签到"
+    elif activeType == 1:
+        classType = "照片签到"
+    elif activeType == 5:
+        classType = "位置签到"
+    elif activeType == 6:
+        classType = "手势签到"
+    content += className+" "+classType + \
+        " "+get_time()+"\n"
 
 
 def login(uname, code):
@@ -79,11 +107,13 @@ def getcourse():
         print("Cookie已过期")
     else:
         d = json.loads(res.text)
+        with open("./course.json", "wb") as f:
+            f.write(res.text.encode('utf-8'))
         courselist = d['channelList']
         print("课程列表加载完成")
 
 
-def sign1(aid, uid, name):
+def pic_sign(aid, uid, name):
     """ 普通签到 """
     t = get_time()
     print(t+" 发现普通签到")
@@ -100,7 +130,7 @@ def sign1(aid, uid, name):
         return 0
 
 
-def sign2(aid, uid, oid, name):
+def common_sign(aid, uid, oid, name):
     """ 照片签到 """
     t = get_time()
     print(t+" 发现照片签到/手势签到")
@@ -117,7 +147,7 @@ def sign2(aid, uid, oid, name):
         return 0
 
 
-def sign3(aid, uid, lat, long, name, address):
+def local_sign(aid, uid, lat, long, name, address):
     """ 定位签到 """
     t = get_time()
     print(t+" 发现定位签到")
@@ -162,32 +192,35 @@ def get_sign_type(aid):
         return 0
 
 
-def sign(aid, uid, name):
+def sign(className, aid, uid, name):
     """ 拍照签到 1 普通签到 2 定位签到 5 手势签到 6 """
     activeType = get_sign_type(aid)
     if(activeType == 1):
-        images = setting['sign']['img']
+        image = setting['sign']['img']
         # 未配置图片
-        if(len(images) == 0):
-            signres = sign2(aid, uid, "", name)
+        if(len(image) == 0):
+            signres = common_sign(aid, uid, "", name)
         else:
-            nowimg = init_img(images)
-            signres = sign2(aid, uid, nowimg, name)
+            nowimg = init_img(image)
+            signres = common_sign(aid, uid, nowimg, name)
     elif(activeType == 2):
-        signres = sign1(aid, uid, name)
+        signres = pic_sign(aid, uid, name)
     elif(activeType == 5):
-        signres = sign3(aid, uid, setting['sign']['lat'],
-                        setting['sign']['long'], name, setting['sign']['address'])
+        signres = local_sign(aid, uid, setting['sign']['lat'],
+                             setting['sign']['long'], name, setting['sign']['address'])
     elif(activeType == 6):
-        signres = sign2(aid, uid, "", name)
+        signres = common_sign(aid, uid, "", name)
     else:
-        return -1
+        return 0
+    if signres == 1:
+        write_content(className, activeType)
     print("签到结果"+str(signres))
     return signres
 
 
-def gettask(courseId, classId, uid, cpi, name, sign_common, sign_pic, sign_hand, sign_local):
+def gettask(className, courseId, classId, uid, cpi, name, sign_common, sign_pic, sign_hand, sign_local):
     """ 获取用户活动列表 """
+    flag = 0
     try:
         url = "https://mobilelearn.chaoxing.com/ppt/activeAPI/taskactivelist?courseId=" + \
             courseId+"&classId="+classId+"&uid="+uid+"&cpi="+cpi
@@ -198,26 +231,29 @@ def gettask(courseId, classId, uid, cpi, name, sign_common, sign_pic, sign_hand,
         d = json.loads(res.text)
         if(d['result'] == 1):
             activeList = d['activeList']
-            count = 0
+            flag = count = 0
+
             for active in activeList:
                 status = active['status']
                 activeType = active['activeType']
                 aid = str(active['id'])
                 if(status != 1):
                     return 0
-                if(activeType == 1 and sign_pic == True):
-                    sign(aid, uid, name)
-                if(activeType == 2 and sign_common == True):
-                    sign(aid, uid, name)
-                if(activeType == 5 and sign_local == True):
-                    sign(aid, uid, name)
-                if(activeType == 6 and sign_hand == True):
-                    sign(aid, uid, name)
+                if(activeType == 1 and sign_pic):
+                    flag += sign(className, aid, uid, name)
+                if(activeType == 2 and sign_common):
+                    flag += sign(className, aid, uid, name)
+                if(activeType == 5 and sign_local):
+                    flag += sign(className, aid, uid, name)
+                if(activeType == 6 and sign_hand):
+                    flag += sign(className, aid, uid, name)
                 count += 1
                 if(count >= setting['other']['count']):
                     break
     except Exception as e:
         print(e)
+    finally:
+        return flag
 
 
 def get_time():
@@ -264,20 +300,10 @@ def init_uid():
         return 0
 
 
-def download_img(url):
-    response = requests.get(url)
-    data = response.content
-    with open('./img.jpg', 'wb') as f:
-        f.write(data)
-
-# 65bd1f7a9422da2fbf532610c528c5d6
-
-
-def init_img(filename):
+def init_img(image):
     """ 初始化图片 """
-    if(filename.startswith('http')):
-        download_img(filename)
-        filename = './img.jpg'
+    response = requests.get(image)
+    data = response.content
     r_session = requests.session()
     url = 'https://pan-yz.chaoxing.com/upload?_token=5d2e8d0aaa92e3701398035f530c4155'
     mobile_header = {
@@ -288,7 +314,7 @@ def init_img(filename):
     }
     img = {}
     try:
-        img = {"file": ("123.jpg", open(filename, "rb"))}
+        img = {"file": ("123.jpg", data)}
     except:
         print("找不到图片")
         return ""  # 空图片
@@ -336,6 +362,7 @@ def init():
 
 def check():
     """ 检测是否需要登录 """
+    flag = 0
     for course in courselist:
         if('roletype' in course['content']):
             roletype = course['content']['roletype']
@@ -343,15 +370,19 @@ def check():
             continue
         if(roletype != 3):
             continue
+
         classId = str(course['content']['id'])
         courseId = str(course['content']['course']['data'][0]['id'])
+        className = course['content']['course']['data'][0]['name']
         cpi = str(course['content']['cpi'])
-        gettask(courseId, classId, myuid, cpi, setting['sign']['name'], setting['sign']['sign_common'],
-                setting['sign']['sign_pic'], setting['sign']['sign_hand'], setting['sign']['sign_local'])
+        flag += gettask(className, courseId, classId, myuid, cpi, setting['sign']['name'], setting['sign']['sign_common'],
+                        setting['sign']['sign_pic'], setting['sign']['sign_hand'], setting['sign']['sign_local'])
+    return flag
 
 
 if __name__ == "__main__":
     res = init()
     if(res == 1):
         print("初始化完成")
-        check()
+        if check() & send:
+            sendmail(setting["email"], content)
