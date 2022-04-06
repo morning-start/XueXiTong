@@ -1,0 +1,26 @@
+[
+  {
+    "account": "",
+    "password": "",
+    "email": "",
+    "sign": {
+      "long": "",
+      "lat": "",
+      "address": "",
+      "name": "",
+      "img": "",
+      "sign_common": 1,
+      "sign_pic": 1,
+      "sign_hand": 1,
+      "sign_local": 1
+    },
+    "other": {
+      "count": 5
+    }
+  },
+  {
+    "mail_host": "",
+    "mail_user": "",
+    "mail_password": ""
+  }
+]
