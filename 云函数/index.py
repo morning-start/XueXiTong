@@ -343,6 +343,3 @@ def main_handler(event, context):
     print("Received context: " + str(context))
     main()
     return("签到成功")
-
-
-main()
