@@ -2,42 +2,21 @@ import datetime
 import json
 import urllib.parse
 import requests
-import smtplib
-from email.mime.text import MIMEText
-from config import *
+from send import send
+
+with open("./emailig.json", 'r', encoding='utf-8') as f:
+    conf = json.loads(f.read())
+setting = conf[0]
+
 
 # 乱七八糟的变量 不要动我
-send = conf["mail_host"] and conf["mail_password"] and conf["mail_user"]
+
 session = requests.session()
 requests.packages.urllib3.disable_warnings()
 mycookie = ""
 myuid = ""
 courselist = []
 content = "签到成功：\n"
-
-
-def sendmail(mail, content):
-    receivers = []  # 接收人邮箱
-    receivers.append(mail)
-    title = '超星自动签到系统'  # 邮件主题
-    message = MIMEText(str(content), 'plain', 'utf-8')  # 内容, 格式, 编码
-    message['From'] = "{}".format(conf["mail_user"])
-    message['To'] = ",".join(receivers)
-    message['Subject'] = title
-
-    try:
-        smtpObj = smtplib.SMTP_SSL(conf["mail_host"], 465)  # 启用SSL发信, 端口一般是465
-        smtpObj.login(conf["mail_user"], conf["mail_password"])  # 登录验证
-        smtpObj.sendmail(conf["mail_user"], receivers,
-                         message.as_string())  # 发送
-        print('================================')
-        print('||                            ||')
-        print("||       Have send mail       ||")
-        print('||                            ||')
-        print('================================')
-    except smtplib.SMTPException as e:
-        print(e, "邮件发送失败")
-        pass
 
 
 def write_content(className, activeType):
@@ -73,7 +52,6 @@ def login(uname, code):
         a = json.loads(res.text)
         if(a['result'] == 1):
             myuid = str(a['msg']['puid'])
-            save_cookies(myuid, 2)
             return 1
         else:
             print("获取uid失败")
@@ -266,32 +244,6 @@ def get_time():
     return date
 
 
-def init_cookies():
-    """ 初始化Cookies """
-    try:
-        with open('cookies.txt', 'r') as f:
-            data = f.read()
-            f.close()
-            if(len(data) < 100):
-                return 0
-            return data
-    except Exception as e:
-        return 0
-
-
-def init_uid():
-    """ 获取uid """
-    try:
-        with open('uid.txt', 'r') as f:
-            data = f.read()
-            f.close()
-            if(len(data) < 5):
-                return 0
-            return data
-    except Exception as e:
-        return 0
-
-
 def init_img(image):
     """ 初始化图片 """
     response = requests.get(image)
@@ -318,36 +270,15 @@ def init_img(image):
     return response.json().get('objectId')
 
 
-def save_cookies(data, type):
-    """ 保存Cookies文件 """
-    if(type == 1):
-        with open('cookies.txt', 'w') as f:
-            f.write(data)
-            f.close()
-    else:
-        with open('uid.txt', 'w') as f:
-            f.write(str(data))
-            f.close()
-
-
 def init():
     """ 初始化 """
-    global mycookie, myuid
     if(setting['account'] == "" or setting['password'] == ""):
         print("未进行账号配置")
         return 0
-    cookies = init_cookies()
-    uid = init_uid()
-    if(cookies == 0 or uid == 0):
-        res = login(setting['account'], setting['password'])
-        if(res == 0):
-            print("登录失败，请检查账号密码")
-        else:
-            save_cookies(mycookie, 1)
-            getcourse()
+    res = login(setting['account'], setting['password'])
+    if(res == 0):
+        print("登录失败，请检查账号密码")
     else:
-        mycookie = cookies
-        myuid = uid
         getcourse()
     return 1
 
@@ -372,9 +303,9 @@ def check():
     return flag
 
 
-if __name__ == "__main__":
+def main():
     res = init()
     if(res == 1):
         print("初始化完成")
-        if check() and send:
-            sendmail(setting["email"], content)
+        if check():
+            send(content)

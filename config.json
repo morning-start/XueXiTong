@@ -2,7 +2,6 @@
   {
     "account": "",
     "password": "",
-    "email": "",
     "sign": {
       "long": "",
       "lat": "",
@@ -19,8 +18,10 @@
     }
   },
   {
+    "email": "",
     "mail_host": "",
     "mail_user": "",
     "mail_password": ""
-  }
+  },
+  { "SCKEY": "" }
 ]
