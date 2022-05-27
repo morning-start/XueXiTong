@@ -14,12 +14,9 @@ def main_handler(event, context):
     return("签到成功")
 
 
-def main():
+if __name__ == '__main__':
     '''主函数'''
     res_sign = auto_sign()
     if res_sign:
         send(res_sign)
-    return("签到成功")
-
-
-# main()
+    print("签到成功")
