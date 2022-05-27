@@ -7,10 +7,8 @@ with open("./config.json", 'r', encoding='utf-8') as f:
     conf = json.loads(f.read())
 mail = conf[1]
 server = conf[2]
-dingding = conf[3]
 mail_pre = mail["mail_host"] and mail["mail_password"] and mail["mail_user"] and mail['email']
 server_pre = server["SCKEY"]
-dingding_pre = dingding["dingding_hook"]
 
 
 def send(content):
@@ -22,10 +20,6 @@ def send(content):
         send_server(content)
     else:
         print("No ServerChan configured")
-    if dingding_pre:
-        send_dingding(content)
-    else:
-        print("No dingding bot hook configured")
 
 
 def send_mail(content):
@@ -58,29 +52,3 @@ def send_server(content):
     url = api+server["SCKEY"]+'.send'
     res = requests.post(url=url, data=data)
     print(res.text)
-
-
-def send_dingding(content):
-    '''钉钉机器人推送'''
-    key_word = "超星学习通签到"
-    headers = {
-        "Content-Type": "application/json;charset=UTF-8"
-    }
-    webhook = dingding["dingding_hook"]
-    message_body = {
-        "msgtype": "markdown",
-        "markdown": {
-            "title": key_word,
-            "text": content
-        },
-        "at": {
-            "atMobiles": [],
-            "isAtAll": False
-        }
-    }
-    send_data = json.dumps(message_body)
-    send_result = requests.post(url=webhook,data=send_data,headers=headers)
-    if send_result.json()["errmsg"] == "ok":
-        print("dingding send success")
-    else:
-        print("dingding send faild")

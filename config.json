@@ -23,10 +23,5 @@
     "mail_user": "",
     "mail_password": ""
   },
-  {
-    "SCKEY": ""
-  },
-  {
-    "dingding_hook": ""
-  }
+  { "SCKEY": "" }
 ]
