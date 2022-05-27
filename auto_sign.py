@@ -2,7 +2,6 @@ import datetime
 import json
 import urllib.parse
 import requests
-from send import send
 
 with open("./config.json", 'r', encoding='utf-8') as f:
     conf = json.loads(f.read())
@@ -303,9 +302,9 @@ def check():
     return flag
 
 
-def main():
+def auto_sign():
     res = init()
     if(res == 1):
         print("初始化完成")
         if check():
-            send(content)
+            return content
