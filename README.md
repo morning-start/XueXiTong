@@ -6,6 +6,13 @@
 2. 签到成功自动发送邮件或sever酱
 3. 部署到腾讯云函数（更准时）
 
+## 功能介绍
+
+config.json 配置文件
+index.py 主程序
+send.py 发送消息
+auto_sign.py 自动签到
+
 ## [腾讯云函数](https://cloud.tencent.com/product/scf/)
 
 :warning: TX 要收费了，只有三月的免费试用。具体看官方[购买指南](https://cloud.tencent.com/document/product/583/12280)
@@ -22,7 +29,7 @@
 
 ![file](./image/2022-04-06-19-51-35.jpg)
 
-将所以 py 文件复制到云函数中
+将所有 py 文件复制到云函数中
 
 config.json 是配置文件，填写要求看[配置](#config)
 
@@ -49,7 +56,7 @@ config.json 是配置文件，填写要求看[配置](#config)
 - password: 密码:warning:
 - long: 经度
 - lat: 纬度
-- address: 地址:warning:
+- address: 地址
 - name: 打卡显示姓名:warning:
 - img: 图片链接，用于图片打卡
 - email: 接受邮件的邮箱地址
