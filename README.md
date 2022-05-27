@@ -8,10 +8,10 @@
 
 ## 功能介绍
 
-config.json 配置文件
-index.py 主程序
-send.py 发送消息
-auto_sign.py 自动签到
+- config.json 配置文件
+- index.py 主程序
+- send.py 发送消息
+- auto_sign.py 自动签到
 
 ## [腾讯云函数](https://cloud.tencent.com/product/scf/)
 
