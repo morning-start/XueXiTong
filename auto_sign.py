@@ -303,6 +303,7 @@ def check():
 
 
 def auto_sign():
+    '''自动签到'''
     res = init()
     if(res == 1):
         print("初始化完成")
