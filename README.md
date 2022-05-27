@@ -3,15 +3,44 @@
 学习通自动签到
 
 1. 签到方式支持：普通，图片，手势，定位
-2. 签到成功自动发送邮件或sever酱
-3. 部署到腾讯云函数（更准时）
+2. 发送签到结果：
+   - 邮件
+   - sever酱
+   - 钉钉机器人（自定义机器人）
+3. 部署到云函数（更准时）
 
-## 功能介绍
+## 安装
 
 - config.json 配置文件
 - index.py 主程序
 - send.py 发送消息
 - auto_sign.py 自动签到
+
+### 配置文件
+
+加:warning:的是必填内容的
+
+- account: 手机号:warning:
+- password: 密码:warning:
+- long: 经度
+- lat: 纬度
+- address: 地址
+- name: 打卡显示姓名:warning:
+- img: 图片链接，用于图片打卡
+- email: 接受邮件的邮箱地址
+- mail_host: 邮箱服务器地址
+- mail_user: 邮箱用户名（账号）
+- mail_password: 邮箱密码（授权码）
+- SCKEY: Server酱密钥
+- send_dingding: 钉钉
+
+账号和密码不确定可以先在[学习通官网](https://passport2.chaoxing.com/login?fid=&newversion=true&refer=https%3A%2F%2Fi.chaoxing.com)尝试以下，再输入
+
+### 配置参考文档
+
+- [网易邮箱获取授权码](https://help.mail.163.com/faqDetail.do?code=d7a5dc8471cd0c0e8b4b8f4f8e49998b374173cfe9171305fa1ce630d7f67ac21b8ba4d48ed49ebc)
+- [server酱](https://sct.ftqq.com/)
+- [钉钉机器人](https://open.dingtalk.com/document/robots/custom-robot-access)
 
 ## [腾讯云函数](https://cloud.tencent.com/product/scf/)
 
@@ -46,27 +75,6 @@ config.json 是配置文件，填写要求看[配置](#config)
 
 具体用法查看[配置](#cron-表达式)
 
-## 配置
-
-### config
-
-加:warning:的是必填内容的
-
-- account: 手机号:warning:
-- password: 密码:warning:
-- long: 经度
-- lat: 纬度
-- address: 地址
-- name: 打卡显示姓名:warning:
-- img: 图片链接，用于图片打卡
-- email: 接受邮件的邮箱地址
-- mail_host: 邮箱服务器地址
-- mail_user: 邮箱用户名（账号）
-- mail_password: 邮箱密码（授权码）
-- SCKEY: Server酱密钥
-
-账号和密码不确定可以先在[学习通官网](https://passport2.chaoxing.com/login?fid=&newversion=true&refer=https%3A%2F%2Fi.chaoxing.com)尝试以下，再输入
-
 ### Cron 表达式
 
 [官方文档](https://cloud.tencent.com/document/product/583/9708)
@@ -92,12 +100,16 @@ Cron 表达式有七个必需字段，按空格分隔。
 | 星期 | 0 - 6 的整数或 SUN,MON,TUE,WED,THU,FRI,SAT。其中 0 指星期日，1 指星期一，以此类推 | `, - * /` |
 | 年   | 1970 - 2099 的整数                                                                | `, - * /` |
 
-## 贡献
-
-感谢 [给我一碗炒饭](https://www.bilibili.com/video/av94208525) 的签到代码
-
 ## 画饼
 
 可能会拥有的功能
 
 1. 未完成作业查询功能
+
+## 版权说明
+
+该项目签署了 GPL 授权许可，详情请参阅 LICENSE.md
+
+## 鸣谢
+
+[给我一碗炒饭](https://www.bilibili.com/video/av94208525) 的签到代码
