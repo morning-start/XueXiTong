@@ -79,7 +79,7 @@ def send_dingding(content):
         }
     }
     send_data = json.dumps(message_body)
-    send_result = requests.post(url=webhook,data=send_data,headers=headers)
+    send_result = requests.post(url=webhook, data=send_data, headers=headers)
     if send_result.json()["errmsg"] == "ok":
         print("dingding send success")
     else:

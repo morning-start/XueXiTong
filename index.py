@@ -15,6 +15,7 @@ def main_handler(event, context):
 
 
 def main():
+    '''主函数'''
     res_sign = auto_sign()
     if res_sign:
         send(res_sign)
