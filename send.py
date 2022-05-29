@@ -2,12 +2,8 @@ import smtplib
 import json
 import requests
 from email.mime.text import MIMEText
+from conf import *
 
-with open("./config.json", 'r', encoding='utf-8') as f:
-    conf = json.loads(f.read())
-mail = conf[1]
-server = conf[2]
-dingding = conf[3]
 mail_pre = mail["mail_host"] and mail["mail_password"] and mail["mail_user"] and mail['email']
 server_pre = server["SCKEY"]
 dingding_pre = dingding["dingding_hook"]

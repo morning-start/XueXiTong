@@ -2,10 +2,7 @@ import datetime
 import json
 import urllib.parse
 import requests
-
-with open("./config.json", 'r', encoding='utf-8') as f:
-    conf = json.loads(f.read())
-setting = conf[0]
+from conf import *
 
 
 # 乱七八糟的变量 不要动我
