@@ -11,7 +11,7 @@
 
 ## 安装
 
-- config.json 配置文件
+- conf.py 配置文件
 - index.py 主程序
 - send.py 发送消息
 - auto_sign.py 自动签到
@@ -32,7 +32,7 @@
 - mail_user: 邮箱用户名（账号）
 - mail_password: 邮箱密码（授权码）
 - SCKEY: Server酱密钥
-- send_dingding: 钉钉
+- dingding_hook: 钉钉机器人的hoke
 
 账号和密码不确定可以先在[学习通官网](https://passport2.chaoxing.com/login?fid=&newversion=true&refer=https%3A%2F%2Fi.chaoxing.com)尝试以下，再输入
 
@@ -48,27 +48,31 @@
 
 ### 步骤
 
-搭建云函数所有需要用到的文件都在云函数文件夹里，按照如下步骤修改，并上传到云函数
+配置云函数的步骤都差不多，都可以参考如下步骤，现以腾讯云函数为例
 
 #### 第一步，新建一个云函数
 
 ![新建云函数](./image/2022-04-06-19-35-38.jpg)
 
-#### 第二步，创建文件
+#### 第二步，上传压缩包
 
-![file](./image/2022-04-06-19-51-35.jpg)
+:eyes:AutoSign.zip 包括 index.py, send.py, auto_sign.py, conf.py
 
-将所有 py 文件复制到云函数中
-
-config.json 是配置文件，填写要求看[配置](#config)
-
-还有一些自主配置，`sign_` 开头的是签到方式，1 表示开启，0 表示关闭
+![file](image/20220529124112.png)  
 
 #### 第三步，点击完成
 
 ![finish](./image/2022-04-06-19-54-30.jpg)
 
-#### 第四步，配置时间
+#### 第四步，填写配置并测试
+
+![conf](image/20220529124412.png)
+
+conf.py 是配置文件，填写要求看[配置](#配置文件)
+
+还有一些自主配置，`sign_` 开头的是签到方式，1 表示开启，0 表示关闭
+
+#### 第五步，配置触发器
 
 ![create](./image/2022-04-06-19-55-41.jpg)
 ![time](./image/2022-04-06-20-03-36.jpg)
