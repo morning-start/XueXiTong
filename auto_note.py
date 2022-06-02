@@ -49,18 +49,6 @@ def exam_notes():
     return exam
 
 
-def task_notes():
-    '''任务提醒'''
-    task = []
-    res3 = req.get(
-        "https://mooc1.chaoxing.com/work/task-list?courseId=90159512&classId=51489562&vx=1")
-    doc3 = pq(res3.text)
-    for i in doc3("li .fr").items():
-        task_name = i.siblings("p").text()
-        task.append([task_name, i.text()])
-    return task
-
-
 def write_content(header, context):
     '''写入文件'''
     global content
@@ -73,15 +61,11 @@ def note():
     login()
     homework = home_notes()
     exam = exam_notes()
-    task = task_notes()
     write_content("作业提醒", homework)
     write_content("考试提醒", exam)
-    write_content("任务提醒", task)
     return content
 
 
 if __name__ == "__main__":
-    login()
-    homework = home_notes()
-    write_content("作业提醒", homework)
+    note()
     print(content)
