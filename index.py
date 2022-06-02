@@ -1,22 +1,30 @@
 # -*- coding: utf8 -*-
-from auto_sign import auto_sign
-from send import send
+from auto_sign import sign
+from auto_note import note
+from auto_send import send
 import json
 
 
-def main_handler(event, context):
+def handler(event, context):
     '''云函数的主函数'''
     print("Received event: " + json.dumps(event, indent=2))
     print("Received context: " + str(context))
-    res = auto_sign()
+    auto_sign()
+
+
+def auto_sign():
+    res = sign()
     if res:
         send(res)
-    return("签到成功")
+        return 'sign success'
+    else:
+        return 'sign error'
 
 
-if __name__ == '__main__':
-    '''主函数'''
-    res_sign = auto_sign()
-    if res_sign:
-        send(res_sign)
-    print("签到成功")
+def auto_note():
+    res = note()
+    if res:
+        send(res)
+        return 'search success'
+    else:
+        return 'search error'
