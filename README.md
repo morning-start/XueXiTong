@@ -48,9 +48,12 @@
 - [server酱](https://sct.ftqq.com/)
 - [钉钉机器人](https://open.dingtalk.com/document/robots/custom-robot-access)
 
-## [腾讯云函数](https://cloud.tencent.com/product/scf/)
+## 云函数
 
+[腾讯云函数](https://cloud.tencent.com/product/scf/)
 :warning: TX 要收费了，只有三月的免费试用。具体看官方[购买指南](https://cloud.tencent.com/document/product/583/12280)
+
+华为云函数现在还可以用
 
 ### 步骤
 
