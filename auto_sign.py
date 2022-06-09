@@ -299,10 +299,14 @@ def check():
     return flag
 
 
-def auto_sign():
+def sign():
     '''自动签到'''
     res = init()
     if(res == 1):
         print("初始化完成")
         if check():
             return content
+
+
+if __name__ == '__main__':
+    print(sign())

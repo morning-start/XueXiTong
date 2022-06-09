@@ -67,5 +67,4 @@ def note():
 
 
 if __name__ == "__main__":
-    note()
-    print(content)
+    print(note())
