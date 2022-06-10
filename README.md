@@ -50,11 +50,8 @@
 
 ## 云函数
 
-![士大夫](image/2022-05-29-12-41-12.png)
-![速度](image/2022-06-10-14-50-56.png)
-
 - [腾讯云函数](https://github.com/morning-start/XueXiTong/wiki/%E8%85%BE%E8%AE%AF%E4%BA%91%E5%87%BD%E6%95%B0)
-- [华为云函数]()
+- [华为云函数](https://github.com/morning-start/XueXiTong/wiki/%E5%8D%8E%E4%B8%BA%E4%BA%91%E5%87%BD%E6%95%B0)
 
 ## 版权说明
 
