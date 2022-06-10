@@ -1,6 +1,5 @@
 .vscode/
 __pycache__
 test/
-bfg.jar
-passwords.txt
-.git.bfg-report
+
+conf.py
